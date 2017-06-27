@@ -1,0 +1,42 @@
+<a href="/sessions/<%=current_user.id%>" data-method="delete">Logout</a>
+
+<h1>Hi, <%= @user.username %>!</h1>
+
+<form action="/posts" method="POST">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <textarea name="post[post]" id="Post" cols="35" rows="2" placeholder="Post something witty here..."></textarea>
+    <input type="submit" value="Idea!">
+</form>
+
+<% @posts.each do |post| %>
+    <p><a href="/users/<%= post.user.id %>"><%= post.user.username %></a> says: <%= post.post %></p>
+    <p>
+        <% unless post.users.include?(current_user) %>
+            <form action="/likes" method="POST">
+                <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                <input type="hidden" name="like[post_id]" value = "<%= post.id %>">
+                <input type="submit" name="Like" value ="Like">	
+            </form>
+        <% else %>
+            <form action = "/likes/<%= Like.where(user: current_user, post: post).first.id%>" method = "POST">
+                <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                <input type="hidden" name="_method" value="delete">
+                <input type="submit" name="Unlike" value = "Unlike">
+            </form>
+	    <% end %>
+
+        <a href="/bright_ideas/<%= post.id %>"><%= post.users.count %> people</a>
+
+        like this
+    </p>
+
+    <% if current_user == post.user %>
+        <form action="/posts/<%= post.id %>" method="POST">
+        <input type="hidden" name="_method" value="delete">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <input type="submit" value="Delete Post">
+        </form>
+    <% end %>
+
+    <hr>
+<% end %>

@@ -1,0 +1,25 @@
+<a href="/bright_ideas">Bright Ideas</a> 
+<a href="/sessions/<%= current_user.id %>" data-method="delete">Logout</a>
+
+<h1><a href="/users/<%= @posts.user.id %>"><%= @posts.user.username %></a> says: <%= @posts.post %></h1>
+
+<h2>People who liked this post:</h2>
+
+<table>
+    <thead>
+        <tr>
+            <td>Alias</td>
+            <td>Name</td>
+        </tr>
+    </thead>
+    <tbody>
+        <% @post_liked.each do |post|%>
+        <tr>
+            <% %>
+            <td><%= post.username %></td>
+            <td><%= post.name %></td>
+            <% %>
+        </tr>
+        <% end %>
+    </tbody>
+</table>
